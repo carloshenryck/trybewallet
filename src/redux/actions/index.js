@@ -1,5 +1,6 @@
 export const SAVE_INFORMATIONS = 'SAVE_INFORMATIONS';
-export const SAVE_CURRENCIES = 'SAVE_CURRENCIES';
+export const SAVE_CURRENCIES_NAME = 'SAVE_CURRENCIES_NAME';
+export const SAVE_CURRENCIES_OBJ = 'SAVE_CURRENCIES_OBJ';
 
 export const userInfoAction = (email) => ({
   type: SAVE_INFORMATIONS,
@@ -8,14 +9,28 @@ export const userInfoAction = (email) => ({
   },
 });
 
-export const currenciesAction = (currencies) => ({
-  type: SAVE_CURRENCIES,
+export const currenciesNameAction = (currencies) => ({
+  type: SAVE_CURRENCIES_NAME,
   currencies,
 });
 
-export const fetchCurrenciesThunk = () => async (dispatch) => {
+export const currenciesObjAction = (currencies) => ({
+  type: SAVE_CURRENCIES_OBJ,
+  currencies,
+});
+
+export const getCurrenciesNameThunk = () => async (dispatch) => {
   const response = await fetch('https://economia.awesomeapi.com.br/json/all');
   const data = await response.json();
   const currenciesArr = Object.keys(data).filter((currency) => currency !== 'USDT');
-  dispatch(currenciesAction(currenciesArr));
+  dispatch(currenciesNameAction(currenciesArr));
+};
+
+export const getCurrenciesObjThunk = (expenseInfo) => async (dispatch) => {
+  const response = await fetch('https://economia.awesomeapi.com.br/json/all');
+  const data = await response.json();
+
+  delete data.USDT;
+  expenseInfo.exchangeRates = data;
+  dispatch(currenciesObjAction(expenseInfo));
 };
