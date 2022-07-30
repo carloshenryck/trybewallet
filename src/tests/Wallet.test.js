@@ -4,7 +4,6 @@ import { screen } from '@testing-library/react';
 import Wallet from '../pages/Wallet';
 
 import { renderWithRouterAndRedux } from './helpers/renderWith';
-import { toBeInTheDocument } from "@testing-library/jest-dom";
 
 describe('Página carteira', () => {
   it('verifica se o email, valor e moeda está na tela', () => {
