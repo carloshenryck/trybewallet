@@ -1,6 +1,7 @@
 export const SAVE_INFORMATIONS = 'SAVE_INFORMATIONS';
 export const SAVE_CURRENCIES_NAME = 'SAVE_CURRENCIES_NAME';
 export const SAVE_CURRENCIES_OBJ = 'SAVE_CURRENCIES_OBJ';
+export const REMOVE_EXPENSE = 'REMOVE_EXPENSE';
 
 export const userInfoAction = (email) => ({
   type: SAVE_INFORMATIONS,
@@ -17,6 +18,11 @@ export const currenciesNameAction = (currencies) => ({
 export const currenciesObjAction = (currencies) => ({
   type: SAVE_CURRENCIES_OBJ,
   currencies,
+});
+
+export const removeExpenseAction = (id) => ({
+  type: REMOVE_EXPENSE,
+  id,
 });
 
 export const getCurrenciesNameThunk = () => async (dispatch) => {
