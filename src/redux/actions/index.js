@@ -1,7 +1,10 @@
 export const SAVE_INFORMATIONS = 'SAVE_INFORMATIONS';
 export const SAVE_CURRENCIES_NAME = 'SAVE_CURRENCIES_NAME';
-export const SAVE_CURRENCIES_OBJ = 'SAVE_CURRENCIES_OBJ';
+export const SAVE_EXPENSE = 'SAVE_EXPENSE';
 export const REMOVE_EXPENSE = 'REMOVE_EXPENSE';
+export const EDITOR_MODE = 'EDITOR_MODE';
+export const PASS_INFO_INPUT = 'PASS_INFO_INPUT';
+export const UPDATE_EXPENSES = 'UPDATE_EXPENSES';
 
 export const userInfoAction = (email) => ({
   type: SAVE_INFORMATIONS,
@@ -15,13 +18,23 @@ export const currenciesNameAction = (currencies) => ({
   currencies,
 });
 
-export const currenciesObjAction = (currencies) => ({
-  type: SAVE_CURRENCIES_OBJ,
+export const saveExpenseAction = (currencies) => ({
+  type: SAVE_EXPENSE,
   currencies,
 });
 
 export const removeExpenseAction = (id) => ({
   type: REMOVE_EXPENSE,
+  id,
+});
+
+export const updateExpensesAction = (expenses) => ({
+  type: UPDATE_EXPENSES,
+  expenses,
+});
+
+export const editorModeAction = (id) => ({
+  type: EDITOR_MODE,
   id,
 });
 
@@ -38,5 +51,5 @@ export const getCurrenciesObjThunk = (expenseInfo) => async (dispatch) => {
 
   delete data.USDT;
   expenseInfo.exchangeRates = data;
-  dispatch(currenciesObjAction(expenseInfo));
+  dispatch(saveExpenseAction(expenseInfo));
 };

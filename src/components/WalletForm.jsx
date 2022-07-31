@@ -2,7 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { getCurrenciesNameThunk, getCurrenciesObjThunk } from '../redux/actions';
+import {
+  getCurrenciesNameThunk,
+  getCurrenciesObjThunk,
+  updateExpensesAction,
+  editorModeAction,
+} from '../redux/actions';
 
 class WalletForm extends Component {
   constructor() {
@@ -21,6 +26,11 @@ class WalletForm extends Component {
     getCurrencies();
   }
 
+  /*   componentDidUpdate() {
+    const { isEditing } = this.props;
+    if (isEditing) this.expenseInfoOnInputs();
+  } */
+
   handleChange = ({ target }) => {
     const { id } = target;
     this.setState({
@@ -30,7 +40,7 @@ class WalletForm extends Component {
 
   saveExpense = () => {
     const { value, description, currency, method, tag } = this.state;
-    const { currentId, saveExpense } = this.props;
+    const { currentId, saveExpenseOnStore } = this.props;
 
     const expenseInfo = {
       id: currentId,
@@ -40,17 +50,51 @@ class WalletForm extends Component {
       method,
       tag,
     };
-    saveExpense(expenseInfo);
+    saveExpenseOnStore(expenseInfo);
     this.setState({
       value: '',
       description: '',
     });
   }
 
-  render() {
-    const { currencies } = this.props;
+  updateExpenses = () => {
+    const { expenses, idToEdit, updateExpensesOnStore, editorMode } = this.props;
     const { value, description, currency, method, tag } = this.state;
 
+    const updatedExpenses = expenses.map((expense) => {
+      if (expense.id === idToEdit) {
+        expense.value = value;
+        expense.description = description;
+        expense.currency = currency;
+        expense.method = method;
+        expense.tag = tag;
+      }
+      return expense;
+    });
+
+    updateExpensesOnStore(updatedExpenses);
+    editorMode();
+  }
+
+  // funcionalidade para preencher o input automaticamente ao clicar em editar
+  /*   expenseInfoOnInputs = () => {
+    const { value } = this.state;
+    if (value === '') {
+      const { expenses, idToEdit } = this.props;
+      const expenseObj = expenses.find((expense) => expense.id === idToEdit);
+      this.setState({
+        value: expenseObj.value,
+        description: expenseObj.description,
+        currency: expenseObj.currency,
+        method: expenseObj.method,
+        tag: expenseObj.tag,
+      });
+    }
+  } */
+
+  render() {
+    const { currencies, isEditing } = this.props;
+    const { value, description, currency, method, tag } = this.state;
     return (
       <>
         <label htmlFor="value">
@@ -107,7 +151,11 @@ class WalletForm extends Component {
           <option>Transporte</option>
           <option>Saúde</option>
         </select>
-        <button type="button" onClick={ this.saveExpense }>Adicionar despesa</button>
+        { isEditing ? (
+          <button type="button" onClick={ this.updateExpenses }>Editar despesa</button>
+        ) : (
+          <button type="button" onClick={ this.saveExpense }>Adicionar despesa</button>
+        ) }
       </>
     );
   }
@@ -121,11 +169,16 @@ WalletForm.propTypes = {
 const mapStateToProps = (state) => ({
   currencies: state.wallet.currencies,
   currentId: state.wallet.currentId,
+  isEditing: state.wallet.editor,
+  expenses: state.wallet.expenses,
+  idToEdit: state.wallet.idToEdit,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   getCurrencies: () => dispatch(getCurrenciesNameThunk()),
-  saveExpense: (expenseInfo) => dispatch(getCurrenciesObjThunk(expenseInfo)),
+  saveExpenseOnStore: (expenseInfo) => dispatch(getCurrenciesObjThunk(expenseInfo)),
+  updateExpensesOnStore: (expenses) => dispatch(updateExpensesAction(expenses)),
+  editorMode: () => dispatch(editorModeAction()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(WalletForm);

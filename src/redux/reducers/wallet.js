@@ -1,7 +1,9 @@
 import {
   SAVE_CURRENCIES_NAME,
-  SAVE_CURRENCIES_OBJ,
+  SAVE_EXPENSE,
   REMOVE_EXPENSE,
+  UPDATE_EXPENSES,
+  EDITOR_MODE,
 } from '../actions';
 
 const INITIAL_STATE = {
@@ -19,7 +21,7 @@ const walletReducer = (state = INITIAL_STATE, action) => {
       ...state,
       currencies: action.currencies,
     };
-  case SAVE_CURRENCIES_OBJ:
+  case SAVE_EXPENSE:
     return {
       ...state,
       expenses: [...state.expenses, action.currencies],
@@ -29,6 +31,17 @@ const walletReducer = (state = INITIAL_STATE, action) => {
     return {
       ...state,
       expenses: state.expenses.filter((expense) => expense.id !== action.id),
+    };
+  case UPDATE_EXPENSES:
+    return {
+      ...state,
+      expenses: action.expenses,
+    };
+  case EDITOR_MODE:
+    return {
+      ...state,
+      editor: !state.editor,
+      idToEdit: action.id,
     };
   default:
     return state;
