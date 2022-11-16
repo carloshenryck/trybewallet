@@ -20,7 +20,7 @@ Site para organização de despesas
 - Editar ou excluir despesa
 
 ## 🧠 Aprendizado
-Durante esse projeto aprendi a trabalhar com Redux, gereciando estados vindos de uma API de cotação
+Durante esse projeto aprendi a gerenciar estados com Redux
 
 ## 📦 Inicialização
 ```bash
